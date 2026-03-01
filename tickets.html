@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORPHAN MAKER | Bilety</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="logo">INFO</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Strona główna</a></li>
+            <li><a href="ricky_lopez.html">Ricky</a></li>
+            <li><a href="meet_the_band.html">Zespół</a></li>
+            <li><a href="tickets.html" class="active">Bilety</a></li>
+        </ul>
+    </nav>
+
+    <main class="error-page">
+        <div class="error-container">
+            <div class="error-icon">⚠</div>
+            <h1 class="glitch error-title" data-text="NIECZYNNE">NIECZYNNE</h1>
+            <div class="error-code">BŁĄD 0x77_BRAK_BILETÓW</div>
+            <div class="neon-divider" style="margin: 30px auto; width: 60%;"></div>
+            <p class="error-message">
+                System sprzedaży biletów jest aktualnie <span class="highlight-pink">wyłączony</span> z powodu niezapłaconego rachunku za prąd.
+            </p>
+            <p class="error-message">
+                Prosimy o cierpliwość. Ricky próbuje naprawić sytuację za pomocą modlitwy i piwa.
+            </p>
+            <div class="error-ascii">
+<pre>
+    ┌──────────────────────────┐
+    │                          │
+    │   ╔═══╗   BILET          │
+    │   ║ ? ║   ORPHAN MAKER   │
+    │   ╚═══╝   SEKTOR: ???    │
+    │           RZĄD: ???      │
+    │           MIEJSCE: ???   │
+    │                          │
+    │   STATUS: ██████████     │
+    │           NIE DZIAŁA     │
+    │                          │
+    └──────────────────────────┘
+</pre>
+            </div>
+            <p class="error-substatus">
+                Prawdopodobieństwo naprawy: <span class="highlight-cyan">byku małe</span>
+            </p>
+            <div class="error-suggestion">
+                💡 Sugestia: Przyjdź na koncert i powiedz, że znasz Ricky'ego. Może zadziała.
+            </div>
+            <a href="index.html" class="btn primary-btn" style="margin-top: 40px;">← Wróć na stronę główną</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2077 Orphan Maker. Nieautoryzowane kopiowanie i rozprowadzanie nie grozi niczym lol</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
