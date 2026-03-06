@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ========================================
     // 1. Floating Particles Background
-    // ========================================
+
     const canvas = document.getElementById('particles-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -84,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
         animateParticles();
     }
 
-    // ========================================
+    
     // 2. Scroll Reveal Logic (staggered)
-    // ========================================
+
     const observerOptions = {
         root: null,
         rootMargin: '0px',
@@ -105,9 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.scroll-reveal');
     revealElements.forEach(el => observer.observe(el));
 
-    // ========================================
+    
     // 3. Navbar Scroll Effect
-    // ========================================
+
     const navbar = document.querySelector('.navbar');
     if (navbar) {
         window.addEventListener('scroll', () => {
@@ -119,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ========================================
+
     // 4. Animated Stat Counters
-    // ========================================
+
     const statNumbers = document.querySelectorAll('.stat-number');
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -151,9 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     statNumbers.forEach(el => statsObserver.observe(el));
 
-    // ========================================
+
     // 5. Smooth Parallax on Hero
-    // ========================================
+
     const hero = document.querySelector('.hero');
     const bandName = document.querySelector('.band-name');
     if (hero && bandName) {
@@ -169,9 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ========================================
+
     // 6. Typing effect for hero subtitle
-    // ========================================
+
     const subtitle = document.querySelector('.hero-subtitle');
     if (subtitle) {
         const text = subtitle.textContent;
@@ -188,3 +187,125 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(typeChar, 1200);
     }
 });
+
+// 7. Initialize Supabase
+
+// 7. Initialize Supabase & Reviews
+
+if (window.supabase) {
+    const supabaseUrl = 'https://wgctyijulsbfxzzzgbeu.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndnY3R5aWp1bHNiZnh6enpnYmV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTYzNjcsImV4cCI6MjA4ODMzMjM2N30.xNBMhfwRS3NCqqN2yeZl21Ks4MTICt9mY621lXAbBCE';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Fetch concert locations for the dropdown
+    async function loadConcertLocations() {
+        const select = document.getElementById('review-location');
+        if (!select) return;
+
+        const { data, error } = await supabase
+            .from('concerts')
+            .select('location_name');
+
+        if (error || !data) {
+            console.error('Error fetching locations:', error);
+            return;
+        }
+
+        const locations = [...new Set(data.map(item => item.location_name))];
+        locations.forEach(location => {
+            const option = document.createElement('option');
+            option.value = location;
+            option.textContent = location;
+            select.appendChild(option);
+        });
+    }
+
+    // Fetch and display reviews
+    async function loadReviews() {
+        const container = document.getElementById('reviews-list');
+        if (!container) return;
+
+        const { data, error } = await supabase
+            .from('band_reviews')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            container.innerHTML = '<p class="loading-reviews">Nie udało się załadować recenzji.</p>';
+            console.error('Supabase error:', error);
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="loading-reviews">Brak recenzji. Bądź pierwszy!</p>';
+            return;
+        }
+
+        container.innerHTML = data.map(review => `
+            <div class="review-box scroll-reveal visible">
+                <h3>${escapeHtml(review.location)}</h3>
+                <p class="quote">${escapeHtml(review.content)}</p>
+                <p class="reviewer-name">— ${escapeHtml(review.author)}</p>
+            </div>
+        `).join('');
+    }
+
+    // Submit a new review
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = reviewForm.querySelector('.review-submit-btn');
+            const statusEl = document.getElementById('form-status');
+            const author = document.getElementById('review-author').value.trim();
+            const location = document.getElementById('review-location').value.trim();
+            const content = document.getElementById('review-content').value.trim();
+
+            if (!author || !location || !content) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wysyłanie...';
+            statusEl.textContent = '';
+            statusEl.className = 'form-status';
+
+            const { error } = await supabase
+                .from('band_reviews')
+                .insert([{ author, location, content }]);
+
+            if (error) {
+                statusEl.textContent = 'Błąd podczas wysyłania. Spróbuj ponownie.';
+                statusEl.classList.add('error');
+                console.error('Insert error:', error);
+            } else {
+                statusEl.textContent = 'Recenzja dodana pomyślnie!';
+                statusEl.classList.add('success');
+                reviewForm.reset();
+                await loadReviews();
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Wyślij recenzję';
+        });
+    }
+
+    // Helper to prevent XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Load reviews on page load
+    loadReviews();
+    loadConcertLocations();
+
+    const locationSelect = document.getElementById('review-location');
+    if(locationSelect) {
+        locationSelect.addEventListener('change', () => {
+            if(locationSelect.value) {
+                locationSelect.classList.remove('select-placeholder');
+            }
+        });
+    }
+}
