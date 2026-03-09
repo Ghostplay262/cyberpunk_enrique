@@ -22,23 +22,48 @@
         </ul>
     </nav>
 
+    <section class="page-header scroll-reveal">
+        <h2 class="glitch error-title" data-text="Recenzje">Recenzje</h2>
+        <p class="page-subtitle">Co mówią o nas fani</p>
+    </section>
+
     <div class="neon-divider"></div>
 
-    <section class="reviews-container scroll-reveal">
-        
-        <div class="review-box">
-            <h3 class="glitch" data-text="Hałas 102">Hałas 102</h3>
-            <p class="quote">"Koncert taki, że szczena opada."</p>
-            <div class="reviewer-name">- Kaizen</div>
-        </div>
-
-        <div class="review-box">
-            <h3 class="glitch" data-text="Hałas 102">Hałas 102</h3>
-            <p class="quote">"iskierko prosze rozpierdol mi gitare na glowie."</p>
-            <div class="reviewer-name">- Shimei</div>
+    <!-- Review Form -->
+    <section class="reviews-form-section scroll-reveal">
+        <div class="review-box review-form-box">
+            <h3>Napisz recenzję</h3>
+            <form id="review-form">
+                <div class="form-group">
+                    <label for="review-author">Twoje imię</label>
+                    <input type="text" id="review-author" name="author" placeholder="np. Jan Kowalski" required>
+                </div>
+                <div class="form-group">
+                    <label for="review-location">Lokalizacja</label>
+                    <div class="select-container">
+                        <select id="review-location" name="location" required class="select-placeholder">
+                            <option value="" disabled selected>Wybierz lokalizację...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review-content">Twoja recenzja</label>
+                    <textarea id="review-content" name="content" rows="4" placeholder="Podziel się swoją opinią..." required></textarea>
+                </div>
+                <button type="submit" class="btn primary-btn review-submit-btn">Wyślij recenzję</button>
+                <p id="form-status" class="form-status"></p>
+            </form>
         </div>
     </section>
 
+    <div class="neon-divider"></div>
+
+    <!-- Reviews List -->
+    <div class="reviews-container" id="reviews-list">
+        <p class="loading-reviews">Ładowanie recenzji...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>
