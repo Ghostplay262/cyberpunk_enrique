@@ -100,6 +100,53 @@
         <a href="meet_the_band.html" class="btn secondary-btn" style="opacity: 0.6;">Wróć</a>
     </section>
 
+    <script>
+        // 8. Forgotten One Page Effects
+
+        // Random flicker effect for the whole page
+        setInterval(() => {
+            if (Math.random() < 0.05) {
+                document.body.style.opacity = '0.7';
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+                }, 50 + Math.random() * 100);
+            }
+        }, 2000);
+
+        // Random glitch displacement on title
+        const title = document.querySelector('.forgotten-title');
+        if (title) {
+            setInterval(() => {
+                if (Math.random() < 0.1) {
+                    const x = (Math.random() - 0.5) * 8;
+                    const y = (Math.random() - 0.5) * 4;
+                    title.style.transform = `translate(${x}px, ${y}px)`;
+                    setTimeout(() => {
+                        title.style.transform = 'translate(0, 0)';
+                    }, 80);
+                }
+            }, 1500);
+        }
+
+        // Corrupted text random replacement
+        document.querySelectorAll('.corrupted-text').forEach(el => {
+            const original = el.textContent;
+            setInterval(() => {
+                if (Math.random() < 0.08) {
+                    let chars = original.split('');
+                    for (let i = 0; i < 5; i++) {
+                        const idx = Math.floor(Math.random() * chars.length);
+                        chars[idx] = String.fromCharCode(0x2580 + Math.floor(Math.random() * 32));
+                    }
+                    el.textContent = chars.join('');
+                    setTimeout(() => {
+                        el.textContent = original;
+                    }, 150);
+                }
+            }, 3000);
+        });
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
